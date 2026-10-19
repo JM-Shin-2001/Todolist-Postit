@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbf8ee;
+  --foreground: #2d2a26;
+  --board-grid: #eae4d3;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #18181b;
+  --foreground: #f4f4f5;
+  --board-grid: #27272a;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+}
+
+/* 포스트잇 보드 코르크/도트 패턴 배경 느낌 */
+.board-pattern {
+  background-image: radial-gradient(var(--board-grid) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* 포스트잇 그림자 */
+.postit-shadow {
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.dark .postit-shadow {
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* 새 메모 생성 시 착 달라붙는 애니메이션 */
+@keyframes stickOn {
+  0% {
+    transform: scale(1.12) translateY(-14px) rotate(3deg);
+    opacity: 0;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  }
+  70% {
+    transform: scale(0.97) translateY(2px) rotate(-1deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0) rotate(0);
+    opacity: 1;
+  }
+}
+
+.animate-stick-on {
+  animation: stickOn 0.35s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+
+/* prefers-reduced-motion 대응 */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-stick-on {
+    animation: none !important;
+    opacity: 1 !important;
+  }
 }
